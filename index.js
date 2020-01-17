@@ -42,11 +42,11 @@ app.post("/api/postImage", upload.single("uploadedFile"), (req, res) => {
         console.log(req.header)
         console.log(req.file)
 
-        execFile('python3', ["./yolo_py/detect.py", req.file.filename], (err, stdout, stderr) => {
+        execFile('python', ["./yolo_py/object_detection_yolo.py", "--image=./Image/" + req.file.filename], (err, stdout, stderr) => {
             if (err) console.log(err)
             else {
                 let option = {
-                    root: path.join(__dirname, 'Image')
+                    root: __dirname
                 }
                 let filename = stdout.replace('\n', '')
 
@@ -70,11 +70,12 @@ app.post("/api/postImage", upload.single("uploadedFile"), (req, res) => {
 
 app.post('/api/getImageSysc', upload.single('uploadedFile'), (req, res) => {
     if (req.file) {
-        let fileBuffer = execFileSync('python3', ["./yolo_py/detect.py", req.file.filename])
+        let fileBuffer = execFileSync('python', ["./yolo_py/object_detection_yolo.py", "--image=./Image/" + req.file.filename])
         let filename = fileBuffer.toString()
         filename = filename.replace("\n", "")
+        filename = filename.replace("\r", "")
         let option = {
-            root: path.join(__dirname, 'Image')
+            root: __dirname
         }
         res.sendFile(filename, option, (err) => {
             if (err) console.log(err)
