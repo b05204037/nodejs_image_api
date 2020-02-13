@@ -147,6 +147,9 @@ while cv.waitKey(1) < 0:
     # Runs the forward pass to get output of the output layers
     outs = net.forward(getOutputsNames(net))
 
+    #outs is the result array 2-d 
+    outputCount = len(outs) - 1
+
     # Remove the bounding boxes with low confidence
     postprocess(frame, outs)
 
@@ -162,5 +165,13 @@ while cv.waitKey(1) < 0:
         vid_writer.write(frame.astype(np.uint8))
 
     #cv.imshow(winName, frame)
-    print(outputFile)
+
+    outputObject = str(outputCount) + " " + outputFile
+    
+    # outputObject = {
+    #     "outputFile": outputFile,
+    #     "outputCount": outputCount
+    # }
+    
+    print(outputObject)
 
